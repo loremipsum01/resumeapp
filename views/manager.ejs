@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<script>
+    if(!window.sessionStorage.accessToken){
+            (window.location.href = '/')
+            document.write("Unauthorized, You're not logged in");
+        }
+</script>
+        <meta charset="utf-8">
+        <title>Resume Management</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="" name="keywords">
+        <meta content="" name="description">
+      
+        <!-- Favicons -->
+        <link href="img/favicon.png" rel="icon">
+        <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+      
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
+      
+        <!-- Bootstrap CSS File -->
+        <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+       
+        <!-- Main Stylesheet File -->
+        <link href="css/style.css" rel="stylesheet">
+      
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+        <script src="js/angApp.js"></script>
+
+    <!-- ANGULAR UI GRID -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-touch.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-animate.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-sanitize.js"></script>
+    <script src="http://ui-grid.info/release/ui-grid-unstable.js"></script>
+    <link rel="stylesheet" href="http://ui-grid.info/release/ui-grid-unstable.css" type="text/css">
+</head>
+
+<body ng-app='uigrid' ng-controller="uigrid" >
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      <a class="navbar-brand smoothscroll" href="/"><b>Resume Application</b></a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="" ng-click="$event.preventDefault();logout()">Manager Logout</a>
+        </li>
+      </ul>
+    </div>
+    <!--/.nav-collapse -->
+  </div>
+</div>
+
+
+    <div class='container' > <!-- app starts  -->
+        <br/><br/>
+        <div class='headerwrap'>
+            <div class="row">
+                <h2>List of Applicants</h2>
+            </div>
+        </div> 
+
+        <div>  <!--Controller -->
+            <div ui-grid="gridOptions" class="grid"></div>  
+        </div>
+    </div> <br><br>
+
+    <div id="copyrights">
+        <div class="container">
+            <p>
+            &copy; Copyrights <strong>Flatty</strong>. All Rights Reserved
+            </p>
+            <div class="credits">
+            <!--
+                You are NOT allowed to delete the credit link to TemplateMag with free version.
+                You can delete the credit link only if you bought the pro version.
+                Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/flatty-bootstrap-app-landing-page-template/
+                Licensing information: https://templatemag.com/license/
+            -->
+            Created with Flatty template by <a href="https://templatemag.com/">TemplateMag</a>
+            </div>
+        </div>
+    </div>
+        <!-- / copyrights -->
+
+<style>
+    .grid {
+        height: 60vh;
+        }
+</style>
+
+</body>
+
+</html>

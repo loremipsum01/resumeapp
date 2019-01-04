@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Resume Application</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Favicons -->
+  <link href="img/favicon.png" rel="icon">
+  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+  <!-- Main Stylesheet File -->
+  <link href="css/style.css" rel="stylesheet">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src='js/angApp.js'></script>
+  
+  <!-- =======================================================
+    Template Name: Flatty
+    Template URL: https://templatemag.com/flatty-bootstrap-app-landing-page-template/
+    Author: TemplateMag.com
+    License: https://templatemag.com/license/
+  ======================================================= -->
+</head>
+
+<body ng-app="myApp">
+
+  <!-- Fixed navbar -->
+  <section id="section-start"></section>
+  <div class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        <a class="navbar-brand smoothscroll" href="#section-start"><b>Resume Application</b></a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#section-login" class="smoothscroll">Manager Login</a></li>
+          <li><a href="#section-submit" class="smoothscroll">Submit Resume</a></li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </div> </section>
+
+  <div id="headerwrap">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6">
+          <h1>Resume Submission Engine <small>By AdeYinka</small></h1>
+					<h3>Here you can submit your resume if you're interested in working with us. 
+            All HR managers should login to view current applicants</h3>
+            <a type="button" href="#section-submit" class="btn btn-warning smoothscroll">Get Started</a>
+        </div>
+        <!-- /col-lg-6 -->
+        <div class="col-lg-6">
+          <img class="img-responsive" src="img/resume-pic.png" alt=""><br><br>
+        </div>
+        <!-- /col-lg-6 -->
+        </div>
+      <!-- /row -->
+    </div>
+    <!-- /container -->
+  </div> <!-- /headerwrap -->
+      
+  <!-- submit application -->
+  <section id="section-submit">
+      <div class="container">
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <h2 class="centered">Submit Your Resume</h2>
+              <p class="centered" >Submit your resume here for HR Managers to view!</p>
+            </div>
+          </div>
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2">
+            <div class="cform" id="contact-form" ng-controller="formCtr1">
+              <form name="appSub" action="/submit" method="POST" class="contact-form php-mail-form" enctype="multipart/form-data">
+                
+                <div class="form-group">
+                  <label for="firstName">First Name</label>
+                  <input type="text" name="firstName" class="form-control" id="firstName" placeholder="First Name" required/>
+                  <div class="validate"></div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="lastName">Last Name</label>
+                  <input type="text" name="lastName" class="form-control" id="lastName" placeholder="Last Name" required/>
+                  <div class="validate"></div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" required/>
+                  <div class="validate"></div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="position">Position</label>
+                    <select name="position" class="form-control" required>
+                      <option ng-repeat="x in positions">{{ x.positiontitle }}</option>
+                    </select>
+                  <div class="validate"></div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="resumeFile">Upload Your Resume</label>
+                  <input name="resumeFile" type="file" class="form-control" accept=".pdf" required>
+                  <div class="validate"></div>
+                </div>
+                
+                <div class="loading"><img src="lib/php-mail-form/loading.gif"></div>
+                <div class="error-message"></div>
+                <div class="sent-message">Your resume has been sent. Thank you!</div>
+
+                <div class="form-send">
+                  <button type="submit" class="btn btn-large">SUBMIT</button>
+                  <p ng-show="appSub.$invalid.required">Fill in the form completely.</p>
+                </div><br><br>
+              </form>
+            </div>
+          </div>
+        </div> <hr>
+      </div> 
+  </section>
+  
+  <!-- manager login -->
+  <section id="section-login" class="section appear clearfix">
+    <div class="container" ng-controller="formCtr2">
+      <div class="row mar-bot40">
+        <div class="col-md-offset-3 col-md-6">
+          <div class="section-header">
+            <h2 class="centered">Manager Login</h2>
+            <p class="centered" >Login here to view applications.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div class="cform" id="contact-form">
+            <form name="signinForm" ng-submit="mForm()" role="form" class="contact-form php-mail-form">
+
+              <div class="form-group">
+                <label for="name">Username</label>
+                <input type="text" name="username" class="form-control" ng-model="username" placeholder="Username" required/>
+                <div class="validate"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="name">Password</label>
+                <input type="password" name="password" class="form-control" ng-model="password" placeholder="Password" required/>
+                <div class="validate"></div>
+              </div>
+
+            <div class="form-send">
+              <button type="submit" class="btn btn-large" ng-disabled="signinForm.$invalid">LOGIN</button><br><br>
+              <p ng-show="signinForm.username.$invalid && !signinForm.password.$pristine">Enter your login details.</p>
+              <p ng-show="loginFailed">Invalid username or password!</p>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="copyrights">
+    <div class="container">
+      <p>
+        &copy; Copyrights <strong>Flatty</strong>. All Rights Reserved
+      </p>
+      <div class="credits">
+        <!--
+          You are NOT allowed to delete the credit link to TemplateMag with free version.
+          You can delete the credit link only if you bought the pro version.
+          Buy the pro version with working PHP/AJAX contact form: https://templatemag.com/flatty-bootstrap-app-landing-page-template/
+          Licensing information: https://templatemag.com/license/
+        -->
+        Created with Flatty template by <a href="https://templatemag.com/">TemplateMag</a>
+      </div>
+    </div>
+  </div>
+  <!-- / copyrights --> 
+
+  <!-- JavaScript Libraries -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <!--script src="lib/php-mail-form/validate.js"></script -->
+  <script src="lib/easing/easing.min.js"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="js/main.js"></script>
+
+</body>
+</html>
