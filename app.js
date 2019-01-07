@@ -7,11 +7,12 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bcrypt = require('bcrypt');
-var jwt = require('jsonwebtoken');
-var passport = require('passport');
-var passportJWT = require('passport-jwt');
-var ExtractJwt = passportJWT.ExtractJwt;
-var JwtStrategy = passportJWT.Strategy;
+var session = require('express-session');
+// var jwt = require('jsonwebtoken');
+// var passport = require('passport');
+// var passportJWT = require('passport-jwt');
+// var ExtractJwt = passportJWT.ExtractJwt;
+// var JwtStrategy = passportJWT.Strategy;
 
 //pre-Route
 var user = require('./models/user');
@@ -26,14 +27,32 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
-app.set('superSecret', "secret");
+//app.set('superSecret', "secret");
 app.use(logger('dev'));
+app.use(session({
+    key: 'user_sid',
+    secret: 'somerandonstuffs',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        expires: 600000
+    }
+}));
+
+app.use((req, res, next) => {
+    if (req.cookies.user_sid && !req.session.user) {
+        res.clearCookie('user_sid');        
+    }
+    next();
+});
+
 
 //ROUTES
 app.use('/', indexRouter);
 app.use('/dashboard', managerRouter);
 app.use('/success', resumeRouter);
 app.use('/dbConnection', dbConnectionRouter);
+
 
 
 // EJS view engine
@@ -93,37 +112,37 @@ app.post('/submit', (req, res) => {
 app.post('/login', async function (req, res, next) {
     // var loginData = req.body;
     console.log("I got here - Wanna verify password");
-    var jwtOptions = {}
-    jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-    jwtOptions.secretOrKey = 'galaxyWarp';
+    // var jwtOptions = {}
+    // jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+    // jwtOptions.secretOrKey = 'galaxyWarp';
     
     //check existence of a user
     var User = await user.where('username', req.body.username).fetch().then(user => {
         return user;
     });
 
-    var strategy = new JwtStrategy(jwtOptions, async function (jwt_payload, next) {
-        if (User) {
-            next(null, User);
-        } else {
-            next(null, false);
-        }
-    });
+    // var strategy = new JwtStrategy(jwtOptions, async function (jwt_payload, next) {
+    //     if (User) {
+    //         next(null, User);
+    //     } else {
+    //         next(null, false);
+    //     }
+    // });
 
-    passport.use(strategy);
+    // passport.use(strategy);
 
     //console.log("The hash is "+bcrypt.hashSync("manager1", 10));
-    
+if (User){    
     if (bcrypt.compareSync(req.body.password, User.attributes.password)) {
-        var payload = {
-            id: User.id
-        };
+        // var payload = {
+        //     id: User.id
+        // };
         //if username and password is correct
         //create token
-        var token = jwt.sign(payload, jwtOptions.secretOrKey, {
-            expiresIn: 86400 //expires in 24hours
-        });
-
+        // var token = jwt.sign(payload, jwtOptions.secretOrKey, {
+        //     expiresIn: 86400 //expires in 24hours
+        // });
+        req.session.user = User.dataValues;
         res.json({
             success: true,
             message: 'Enjoy your stay!',
@@ -137,37 +156,54 @@ app.post('/login', async function (req, res, next) {
         //return RESPONSE  of incorrect to angular
         res.json({
             success: false, 
-            message: 'Authentication failed. Wrong password.'
+            message: 'Authentication failed. Wrong Username or Password.'
         });
         console.log('Incorrect Password'); 
     }
+} else {
+    res.json({
+    success: false, 
+    message: 'Authentication failed. Wrong Username or Password.'
+});
+console.log('Incorrect Password');}
 });
 
 
 //Display PDF in Manager Dashboard
 app.get('/resumeRender/:link', function (req, res, next) {
     
-    console.log("Req DATA: " + req.data);
-    console.log("Res DATA: " + res.data);
-    /*if (!token) {
-        res.redirect('/');
-    } */
-    var filename = req.params.link;
-    res.sendFile(path.join(__dirname + '/fileUploads/' + filename))
-})
+    // console.log("Req DATA: " + req.data);
+    // console.log("Res DATA: " + res.data);
 
+    if (req.session.user && req.cookies.user_sid) {
+        var filename = req.params.link;
+        res.sendFile(path.join(__dirname + '/fileUploads/' + filename))
+    } else {
+        res.redirect('/');
+    }
+    
+})
+// route for handling 404 requests(unavailable routes)
+app.use(function (req, res, next) {
+    res.status(404).send("Sorry can't find that!")
+  });
 
 //Logout
 app.get('/logout', function (req, res, next) {
-    token = undefined;
     //Logout and redirect to home page
-    req.logout()
-    res.redirect('/')
+    //token = undefined;
+    if (req.session.user && req.cookies.user_sid) {
+        res.clearCookie('user_sid');
+        res.redirect('/');
+    } else {
+        req.logout()
+        res.redirect('/')
+    }
 });
-
-module.exports = app;
 
 //Open port
 app.listen(8000, function(){
     console.log("Server started on port 8000 and running...");
 });
+
+module.exports = app;

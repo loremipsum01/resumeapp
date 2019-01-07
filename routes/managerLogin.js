@@ -3,9 +3,13 @@ var router = express();
 
 
 
-router.get('/',function(req, res, next){
+router.get('/', function(req, res, next){
     console.log("Loading manager page now");
-    res.render('manager');
+    if (req.session.user && req.cookies.user_sid) {
+        res.render('manager');
+    }  else {
+        res.redirect('/');
+    }
 });
 
 /*router.get('/', passport.authenticate('local', {
