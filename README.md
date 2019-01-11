@@ -1,6 +1,7 @@
 # resumeapp
 
+Install node modules
+```npm install```
 
-`npm install`
-
-`npm start`
+Run app
+```npm start```
