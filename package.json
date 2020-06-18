@@ -13,7 +13,7 @@
   "author": "Yinka (Lorem Ipsum)",
   "license": "ISC",
   "dependencies": {
-    "angular": "^1.7.9",
+    "angular": "^1.8.0",
     "angular-ui-grid": "^4.6.3",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
