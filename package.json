@@ -15,7 +15,7 @@
   "dependencies": {
     "angular": "^1.7.9",
     "angular-ui-grid": "^4.6.3",
-    "bcrypt": "^3.0.0",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "bookshelf": "^1.0.1",
     "cookie-parser": "^1.4.3",
